@@ -23,7 +23,21 @@ class Vacation(object):
 		Vacation.__instance.__labels = [Vacation.__instance.__db.labels.create("Destino"), Vacation.__instance.__db.labels.create("Clima"), Vacation.__instance.__db.labels.create("Ubicacion"), Vacation.__instance.__db.labels.create("Tag")]
 		return Vacation.__instance
 
-	def __addCondicional(condicionales, newCondicional):
+
+	def getDestinations(self, nombre="",ubicacion="",tags=[],clima=""):
+		"""
+		Metodo para obtener una lista de Destinos de la base de datos filtrados por nombre,
+		ubicacion, clima, o tags. Los filtros son opcionales, y se pueden agregar en cualquier
+		combinacion.
+
+		Argumentos:
+			nombre (str): nombre del destino (default: "")
+			ubicacion (str): ubicacion del destino (default = "")
+			tags (list): lista de tags para filtrar (default = [])
+			clima: clima del destino (default = "")
+
+		"""
+		def addCondicional(condicionales, newCondicional):
 			"""
 			Metodo local para construir una cadena de condiconales en Cypher
 
@@ -39,20 +53,6 @@ class Vacation(object):
 				return (condicionales + ' AND ' + newCondicional)
 			else:
 				return (condicionales + newCondicional)
-
-	def getDestinations(self, nombre="",ubicacion="",tags=[],clima=""):
-		"""
-		Metodo para obtener una lista de Destinos de la base de datos filtrados por nombre,
-		ubicacion, clima, o tags. Los filtros son opcionales, y se pueden agregar en cualquier
-		combinacion.
-
-		Argumentos:
-			nombre (str): nombre del destino (default: "")
-			ubicacion (str): ubicacion del destino (default = "")
-			tags (list): lista de tags para filtrar (default = [])
-			clima: clima del destino (default = "")
-
-		"""
 		
 		# Query en cypher base	
 		baseCypher = 'MATCH (looking:Destino)-[:Clima_es]->(clima:Clima), (looking)-[:Ubicado_en]->(ubicacion:Ubicacion)'
@@ -60,11 +60,11 @@ class Vacation(object):
 		condiciones = 'WHERE '
 		# Verificamos si hay algun filtro, si lo hay se agrega a las condiciones en cypher
 		if len(nombre)>0:
-			condiciones = self.__addCondicional(condiciones, ('looking.name="' + nombre + '"'))
+			condiciones = addCondicional(condiciones, ('looking.name="' + nombre + '"'))
 		if len(ubicacion)>0:
-			condiciones = self.__addCondicional(condiciones, ('ubicacion.name="' + ubicacion + '"'))
+			condiciones = addCondicional(condiciones, ('ubicacion.name="' + ubicacion + '"'))
 		if len(clima)>0:
-			condiciones = self.__addCondicional(condiciones, ('clima.name="' + clima + '"'))
+			condiciones = addCondicional(condiciones, ('clima.name="' + clima + '"'))
 		if len(tags)>0:
 			for tag in range(len(tags)):
 				baseCypher = baseCypher + ', (looking)-[:tag]->(tag' + str(tag) + ':Tag)'
@@ -82,7 +82,7 @@ class Vacation(object):
 			results.append(Destino(q["name"], q["ubicacion"], q["clima"], q["tags"]))
 		return results
 
-	def addDestino(destino):
+	def addDestino(self, destino):
 		"""
 		Metodo para agregar un nuevo destino a la base de datos, las relaciones entre nodos
 		eson creadas al agregar el destino a la base de datos
@@ -94,19 +94,25 @@ class Vacation(object):
 			Nodo recien agregado a la base de datos
 		"""
 		#Crear el nuevo destino
-		newDestino = self.__db.nodes.create(nombre=destino.nombre, ubicacion=destino.ubicacion, clima = destino.clima, tags=destino.tags)
+		newDestino = self.__db.nodes.create(name=destino.nombre, ubicacion=destino.ubicacion, clima = destino.clima, tags=destino.tags)
 		self.__labels[0].add(newDestino)
-		#crear nodo de propiedades
-		ubicacion = self.__db.nodes.create(name=destino.ubicacion)
-		clima = self.__db.nodes.create(name=destino.clima)
-		tags = []
+		#crear nodo de propiedades y anadimos a los labels
+		ubicacionN = self.__db.nodes.create(name=destino.ubicacion)
+		self.__labels[2].add(ubicacionN)
+		climaN = self.__db.nodes.create(name=destino.clima)
+		self.__labels[1].add(climaN)
+		tagsN = []
+		cont = 0
 		for tag in destino.tags:
-			tags.append(self.__db.nodes.create(nombre=tag))
+			tagsN.append(self.__db.nodes.create(name=tag))
+			self.__labels[3].add(tagsN[cont])
+			cont += 1
+			
 		#Creamos las relaciones
-		destino.relationships.create("Ubicado_en", ubicacion)
-		destino.relationships.create("Clima_es", clima)
-		for tag in tags:
-			destino.relationships.create("tag", tag)
+		newDestino.relationships.create("Ubicado_en", ubicacionN)
+		newDestino.relationships.create("Clima_es", climaN)
+		for tag in tagsN:
+			newDestino.relationships.create("tag", tag)
 		return newDestino
 
 
