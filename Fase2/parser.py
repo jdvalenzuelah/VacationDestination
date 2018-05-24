@@ -45,3 +45,7 @@ def parseFile(filePath):
 	with open(filePath) as f:
 		for line in f:
 			v.addDestino(parseDestino(line.strip().upper()))
+
+
+parseFile("database.txt")
+print "Finalizado"
