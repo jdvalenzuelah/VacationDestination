@@ -60,15 +60,15 @@ class Vacation(object):
 		condiciones = 'WHERE '
 		# Verificamos si hay algun filtro, si lo hay se agrega a las condiciones en cypher
 		if len(nombre)>0:
-			condiciones = addCondicional(condiciones, ('looking.name="' + nombre + '"'))
+			condiciones = addCondicional(condiciones, ('looking.name="' + nombre.upper() + '"'))
 		if len(ubicacion)>0:
-			condiciones = addCondicional(condiciones, ('ubicacion.name="' + ubicacion + '"'))
+			condiciones = addCondicional(condiciones, ('ubicacion.name="' + ubicacion.upper() + '"'))
 		if len(clima)>0:
-			condiciones = addCondicional(condiciones, ('clima.name="' + clima + '"'))
+			condiciones = addCondicional(condiciones, ('clima.name="' + clima.upper() + '"'))
 		if len(tags)>0:
 			for tag in range(len(tags)):
 				baseCypher = baseCypher + ', (looking)-[:tag]->(tag' + str(tag) + ':Tag)'
-				condiciones = addCondicional(condiciones, ('tag'+str(tag)+'.name="') + str(tags[tag]) + '"')
+				condiciones = addCondicional(condiciones, ('tag'+str(tag) +'.name="') + str(tags[tag]) + '"')
 		if len(condiciones)>6:
 			baseCypher = baseCypher + ' ' + condiciones
 		# Agregamos el valor de retorno a la query de cypher
@@ -125,7 +125,7 @@ class Vacation(object):
 		Returns:
 			true si fue eliminado, false de lo contrario
 		"""
-		cypher = 'MATCH (n)-[r]->(m) WHERE n.name = "' + nombreDestino + '" DELETE n, r, m RETURN n'
+		cypher = 'MATCH (n)-[r]->(m) WHERE n.name = "' + nombreDestino.upper() + '" DELETE n, r, m RETURN n'
 		query = self.__db.query(cypher, returns=(client.Node, str, client.Node))
 		return (len(query)>0)
 

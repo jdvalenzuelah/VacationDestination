@@ -14,10 +14,10 @@ class Destino(object):
 		"""
 		Constructor de la clase 
 		"""
-		self.nombre = nombre
-		self.ubicacion = ubicacion
+		self.nombre = nombre.upper()
+		self.ubicacion = ubicacion.upper()
 		self.tags = tags
-		self.clima = clima
+		self.clima = clima.upper()
 
 	def __str__(self):
 		"""
