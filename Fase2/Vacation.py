@@ -115,12 +115,30 @@ class Vacation(object):
 			newDestino.relationships.create("tag", tag)
 		return newDestino
 
+	def deleteDestino(self, nombreDestino):
+		"""
+		Metodo para eliminar un destino y todas sus relaciones de la base de datos.
+
+		Argumentos:
+			destino (str): destino que se elminara de la base de datos.
+
+		Returns:
+			true si fue eliminado, false de lo contrario
+		"""
+		cypher = 'MATCH (n)-[r]->(m) WHERE n.name = "' + nombreDestino + '" DELETE n, r, m RETURN n'
+		query = self.__db.query(cypher, returns=(client.Node, str, client.Node))
+		return (len(query)>0)
+
+
 
 
 
 	def getUbicaciones(self):
 		"""
-		Obtener todas las ubicaciones
+		Obtener todas las ubicaciones en la base de datos
+
+		Returns:
+			lista con el nombre de las ubicacione disponiblesen la base de datos.
 		"""
 		query = self.__db.query("MATCH (n :Ubicacion) return n", returns=(client.Node, str, client.Node))
 		results = []
