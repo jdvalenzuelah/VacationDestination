@@ -30,6 +30,8 @@ class Vacation(object):
 		ubicacion, clima, o tags. Los filtros son opcionales, y se pueden agregar en cualquier
 		combinacion.
 
+		Este metodo es utilizado para realizar recomendaciones basadas en contenido (filtros).
+
 		Argumentos:
 			nombre (str): nombre del destino (default: "")
 			ubicacion (str): ubicacion del destino (default = "")
