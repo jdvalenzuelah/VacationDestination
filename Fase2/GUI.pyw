@@ -24,7 +24,16 @@ def vBuscar():
     buscar.config(bg="azure")
     #icono de raiz
     buscar.iconbitmap("icono.ico")
-
+    #----raiz.deiconify()-----
+    #crear el label
+    frameb=Frame(buscar,width=700,height=500)
+    frameb.pack()
+    #crear el label
+    nombre=Label(frameb, text="Nombre:",bg = "azure")
+    #posicion del label
+    nombre.place(x=100, y=100)
+    #color del frame
+    frameb.config(bg="azure")
 
     
     #loop
@@ -162,10 +171,6 @@ btBuscar.grid(column=1, row=1)
 #lugar del boton
 btBuscar.place(relwidth=0.8,relheight=0.8)
 #*********************************************************
-
-
-
-
 
 
 
