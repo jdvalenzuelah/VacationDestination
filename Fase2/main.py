@@ -2,6 +2,7 @@ from Destino import Destino
 from Vacation import Vacation
 
 v = Vacation()
-
-for i in v.getDestinations(tags = ["MUSEOS"]):
+t = v.getTags()
+print t
+for i in t:
 	print i

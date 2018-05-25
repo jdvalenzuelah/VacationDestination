@@ -24,7 +24,7 @@ class Vacation(object):
 		return Vacation.__instance
 
 
-	def getDestinations(self, nombre="",ubicacion="",tags=[],clima=""):
+	def getDestinos(self, nombre="",ubicacion="",tags=[],clima=""):
 		"""
 		Metodo para obtener una lista de Destinos de la base de datos filtrados por nombre,
 		ubicacion, clima, o tags. Los filtros son opcionales, y se pueden agregar en cualquier
@@ -140,12 +140,54 @@ class Vacation(object):
 		Obtener todas las ubicaciones en la base de datos
 
 		Returns:
-			lista con el nombre de las ubicacione disponiblesen la base de datos.
+			lista con el nombre de las ubicacione disponibles la base de datos.
 		"""
 		query = self.__db.query("MATCH (n :Ubicacion) return n", returns=(client.Node, str, client.Node))
 		results = []
 		for element in query:
 			q = element[0]
-			results.append(q["Ubicacion"])
-		return results
+			results.append(q["name"])
+		return self.eliminarRepetidos(results)
 
+	def getClimas(self):
+		"""
+		Obtener todos los climas ue hay dentro de la base de datos.
+
+		Returns:
+			lista con los climas que se encuentran en la base de datos.
+		"""
+		query = self.__db.query('MATCH (n :Clima) RETURN n', returns=(client.Node, str, client.Node))
+		results = []
+		for element in query:
+			q = element[0]
+			results.append(q["name"])
+		return self.eliminarRepetidos(results)
+
+	def getTags(self):
+		"""
+		Obtener todas las categorias diferentes que hay dentro de la base de datos.
+
+		Returns:
+			lista con las categorias que hay dentro de la base de datos.
+		"""
+		query = self.__db.query('MATCH (n :Tag) RETURN n', returns=(client.Node, str, client.Node))
+		results = []
+		for element in query:
+			q = element[0]
+			results.append(q["name"])
+		return self.eliminarRepetidos(results)
+
+
+	def eliminarRepetidos(self, list):
+		"""
+		Eliminar los elementos repetidos en una lista de datos
+
+		Args:
+			list (list): la lista de datos que se quieren eliminar los registros repetidos
+
+		"""
+		newList = []
+		for element in list:
+			if(element not in newList):
+				newList.append(element)
+		return newList
