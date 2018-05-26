@@ -7,8 +7,14 @@
 #VacationDestination
 #*************************************
 
-#importamos libreria para GUI
+#importamos libreria para GUI y clases necesarias
 from tkinter import *
+from Destino import Destino
+from Vacation import Vacation
+
+
+#Variable de vacaciones
+vacaciones = Vacation()
     
 
 #**************************Funcion Buscar************************
@@ -18,7 +24,7 @@ def vBuscar():
     buscar.title("Buscar")
     #no ampliable raiz
     buscar.resizable(0,0)
-    #tamaño de raiz
+    #tamano de raiz
     buscar.geometry("300x150")
     #color de fondo de raiz
     buscar.config(bg="azure")
@@ -57,7 +63,7 @@ def vAgregar():
     agregar.title("Agregar")
     #no ampliable raiz
     agregar.resizable(0,0)
-    #tamaño de raiz
+    #tamano de raiz
     agregar.geometry("700x500")
     #color de fondo de raiz
     agregar.config(bg="azure")
@@ -96,7 +102,7 @@ def vEliminar():
     eliminar.title("Eliminar")
     #no ampliable raiz
     eliminar.resizable(0,0)
-    #tamaño de raiz
+    #tamano de raiz
     eliminar.geometry("300x150")
     #color de fondo de raiz
     eliminar.config(bg="azure")
@@ -114,6 +120,7 @@ def vEliminar():
     #cuadro de texto
     cuadroTextob=Entry(framee)
     cuadroTextob.place(x=102, y=50)
+    input = cuadroTextob.get()
     #boton regresar
     bte=Button(framee,text="Eliminar")
     bte.place(x=50,y=100)
@@ -132,7 +139,7 @@ raiz=Tk()
 raiz.title("vacatioin Destination")
 #no ampliable raiz
 raiz.resizable(0,0)
-#tamaño de raiz
+#tamano de raiz
 raiz.geometry("700x500")
 #color de fondo de raiz
 raiz.config(bg="azure")
@@ -146,7 +153,7 @@ raiz.iconbitmap("icono.ico")
 framebtE=Frame()
 #lugar del frame
 framebtE.pack(side="left", anchor="s")
-#tamaño
+#tamano
 framebtE.config(width="233",height="65")
 #color
 framebtE.config(bg="yellowgreen")
@@ -170,7 +177,7 @@ framebtA=Frame()
 framebtA.pack(side="right", anchor="s")
 #color de fondo
 framebtA.config(bg="yellowgreen")
-#tamaño al Frame
+#tamano al Frame
 framebtA.config(width="233", height="65")
 #*********************************************************
 
@@ -192,7 +199,7 @@ framebtB=Frame()
 framebtB.pack(side="bottom")
 #color de fondo
 framebtB.config(bg="yellowgreen")
-#tamaño al Frame
+#tamano al Frame
 framebtB.config(width="234.5", height="65")
 #*********************************************************
 
