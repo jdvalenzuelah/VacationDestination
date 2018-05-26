@@ -17,7 +17,7 @@ class Vacation(object):
 		if Vacation.__instance is None:
 			Vacation.__instance = object.__new__(cls)
 			try:
-				Vacation.__instance.__db = GraphDatabase("http://localhost:7474", username="neo4j", password="123456")
+				Vacation.__instance.__db = GraphDatabase("http://localhost:7474", username="neo4j", password="12345")
 			except Exception as e:
 				raise e
 		Vacation.__instance.__labels = [Vacation.__instance.__db.labels.create("Destino"), Vacation.__instance.__db.labels.create("Clima"), Vacation.__instance.__db.labels.create("Ubicacion"), Vacation.__instance.__db.labels.create("Tag")]
@@ -70,7 +70,7 @@ class Vacation(object):
 		if len(tags)>0:
 			for tag in range(len(tags)):
 				baseCypher = baseCypher + ', (looking)-[:tag]->(tag' + str(tag) + ':Tag)'
-				condiciones = addCondicional(condiciones, ('tag'+str(tag) +'.name="') + str(tags[tag]) + '"')
+				condiciones = addCondicional(condiciones, ('tag'+str(tag) +'.name="') + str(tags[tag]).upper() + '"')
 		if len(condiciones)>6:
 			baseCypher = baseCypher + ' ' + condiciones
 		# Agregamos el valor de retorno a la query de cypher
